@@ -47,8 +47,10 @@ jobs:
         run: ls -a
       - name: List files in the current directory
         run: ls -l
+      - name: echo file
+        run: echo ${{ github.workspace }} 
       - name: Change directory to where docker-compose.yml is located
-        run: cd $GITHUB_WORKSPACE
+        run: cd ${{ github.workspace }} 
       - name: List files in the directory
         run: ls -l
       - name: Run docker-compose up
