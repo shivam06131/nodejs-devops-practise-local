@@ -4,18 +4,6 @@ FROM node:18
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Define build arguments
-ARG PORT
-ARG TESTENV
-
-# Set environment variables based on the arguments
-ENV PORT=${PORT}
-ENV TESTENV=${TESTENV}
-
-# Print the values of the environment variables
-RUN echo "PORT: $PORT" && \
-    echo "TESTENV: $TESTENV"
-
 # Copy package.json and package-lock.json files
 COPY package.json /usr/src/app/package.json
 COPY package-lock.json /usr/src/app/package-lock.json
