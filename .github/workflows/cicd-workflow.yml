@@ -36,11 +36,14 @@ jobs:
         run: |
           echo "TESTENV=${{ secrets.TESTENV }}" >> .env
           echo "PORT=${{ secrets.PORT }}" >> .env
+          cat .env
       - name: Pull images fro docker hub
         run: docker pull shivam6131/nodejs-app:latest
       - name: Delete old container
         run: docker rm -f nodejs-app-container
       - name: navigate to dockercompose directory.
-        run: cd ../
+        run: |
+          cd ../
+          ls -l
       - name: run docker container
         run: docker-compose up -d
