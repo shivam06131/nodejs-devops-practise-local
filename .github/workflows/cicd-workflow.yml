@@ -13,17 +13,17 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build docker name
-        run: docker build -t testNodeApp/nodejs-app .
+        run: docker build -t node_app/nodejs-app .
       - name: Publish image to dockerhub.
-        run: docker push testNodeApp/nodejs-app:latest
+        run: docker push node_app/nodejs-app:latest
 
   deploy:
     needs: build
     runs-on: [aws-ec2]
     steps:
       - name: Pull images fro docker hub
-        run: docker pull testNodeApp/nodejs-app:latest
+        run: docker pull node_app/nodejs-app:latest
       - name: Delete old container
         run: docker rm -f nodejs-app-container
       - name: run docker container
-        run: docker run -d -p 4000:4000 -name nodejs-app-container testNodeApp/nodejs-app
+        run: docker run -d -p 4000:4000 -name nodejs-app-container node_app/nodejs-app
