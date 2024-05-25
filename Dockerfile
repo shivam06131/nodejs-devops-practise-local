@@ -8,8 +8,8 @@ WORKDIR /usr/src/app
 ARG PORT
 ARG TESTENV
 
-RUN echo "PORT: $PORT" && \
-    echo "TESTENV: $TESTENV"
+RUN echo PORT
+RUN echo TESTENV
 
 # Copy package.json and package-lock.json files
 COPY package.json /usr/src/app/package.json
