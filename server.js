@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-console.log("process.env.testENV => ", process.env.testENV);
+console.log("process.env.testENV => ", process.env.TESTENV);
 
 // Set the port the server will listen on
 const PORT = process.env.PORT || 4000;
@@ -11,7 +11,7 @@ app.get('/env', (req, res) => {
   console.log(process.env);
   let resData = {
     port: PORT,
-    testENV: process.env.testENV,
+    testENV: process.env.TESTENV,
   }
 
   console.log("resData => ", resData);
