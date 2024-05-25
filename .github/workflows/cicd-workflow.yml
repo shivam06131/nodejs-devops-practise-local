@@ -39,6 +39,9 @@ jobs:
           services:
             web:
               image: shivam6131/nodejs-app:latest
+              args:
+                PORT: ${{ secrets.PORT }}
+                TESTENV: ${{ secrets.TESTENV }}
               ports:
                 - "${{ secrets.PORT }}:${{ secrets.PORT }}"
               environment:

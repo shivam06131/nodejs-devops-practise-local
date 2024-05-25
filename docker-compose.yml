@@ -15,15 +15,16 @@
 #       - PORT=4000
 #       - testENV=someValue
 
-version: '3'
+version: "3"
 services:
   web:
     image: shivam6131/nodejs-app:latest
     args:
-      PORT: ${PORT}
+      PORT: ${{ secrets.PORT }}
+      TESTENV: ${{ secrets.TESTENV }}
     ports:
-      - "${PORT}:${PORT}"
+      - "${{ secrets.PORT }}:${{ secrets.PORT }}"
     environment:
       - NODE_ENV=development
-      - PORT=${PORT}
-      - TESTENV=${TESTENV}
+      - PORT=${{ PORT }}
+      - TESTENV=${{ secrets.TESTENV }}
