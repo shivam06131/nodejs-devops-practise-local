@@ -33,19 +33,19 @@ jobs:
     runs-on: [aws-ec2-new]
     steps:
       - name: Create Docker Compose file
-      run: |
-        cat <<EOF > docker-compose.yml
-        version: '3'
-        services:
-          web:
-            image: shivam6131/nodejs-app:latest
-            ports:
-              - "${{ secrets.PORT }}:${{ secrets.PORT }}"
-            environment:
-              - NODE_ENV=development
-              - PORT=${{ secrets.PORT }}
-              - TESTENV=${{ secrets.TESTENV }}
-        EOF
-    - name: Run Docker Compose
-      run: docker-compose up -d
-      working-directory: ${{ github.workspace }}
+        run: |
+          cat <<EOF > docker-compose.yml
+          version: '3'
+          services:
+            web:
+              image: shivam6131/nodejs-app:latest
+              ports:
+                - "${{ secrets.PORT }}:${{ secrets.PORT }}"
+              environment:
+                - NODE_ENV=development
+                - PORT=${{ secrets.PORT }}
+                - TESTENV=${{ secrets.TESTENV }}
+          EOF
+      - name: Run Docker Compose
+        run: docker-compose up -d
+        working-directory: ${{ github.workspace }}
