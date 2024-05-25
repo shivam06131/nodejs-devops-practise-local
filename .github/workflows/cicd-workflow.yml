@@ -48,7 +48,7 @@ jobs:
 
       - name: Create Docker Compose file
         run: |
-          cat <<EOF > docker-compose.yml
+          cat <<EOF > docker-compose-uat.yml
           version: '3'
           services:
             web:
@@ -63,4 +63,4 @@ jobs:
           EOF
 
       - name: Run Docker Compose
-        run: docker-compose up -d
+        run: docker-compose -f docker-compose-uat.yml up
