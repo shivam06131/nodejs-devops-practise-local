@@ -36,13 +36,16 @@ jobs:
         run: |
           echo "TESTENV=${{ secrets.TESTENV }}" >> .env
           echo "PORT=${{ secrets.PORT }}" >> .env
-      - name: Pull images fro docker hub
+      - name: Pull images from Docker Hub
         run: docker pull shivam6131/nodejs-app:latest
       - name: Delete old container
         run: docker rm -f nodejs-app-container
-      - name: Current Directory
+      - name: Print current directory
         run: |
-          echo $GITHUB_WORKSPACE
-          ls -l
-      - name: run docker container
+          echo "Current Directory: $GITHUB_WORKSPACE"
+      - name: Change directory to where docker-compose.yml is located
+        run: cd $GITHUB_WORKSPACE
+      - name: List files in the current directory
+        run: ls -l
+      - name: Run docker-compose up
         run: docker-compose up -d
