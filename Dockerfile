@@ -5,7 +5,7 @@ FROM node:18
 WORKDIR /usr/src/app
 
 # Define build arguments
-ARG APP_PORT
+ARG PORT
 
 # Copy package.json and package-lock.json files
 COPY package.json /usr/src/app/package.json
