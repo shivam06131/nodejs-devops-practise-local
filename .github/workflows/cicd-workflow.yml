@@ -63,4 +63,4 @@ jobs:
           EOF
 
       - name: Run Docker Compose
-        run: docker-compose -f docker-compose-uat.yml up
+        run: docker-compose -f docker-compose-uat.yml up -d
