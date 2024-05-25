@@ -16,7 +16,8 @@ RUN npm ci
 COPY . .
 
 # Expose the port the app runs on
-EXPOSE ${APP_PORT}
+# EXPOSE ${APP_PORT}
+EXPOSE 4000
 
 # Define the command to run the application
 CMD ["node", "server.js"]

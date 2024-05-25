@@ -4,7 +4,7 @@ const app = express();
 console.log("process.env.testENV => ", process.env.testENV);
 
 // Set the port the server will listen on
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 // Define a simple GET route
 app.get('/env', (req, res) => {
