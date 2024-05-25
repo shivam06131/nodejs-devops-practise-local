@@ -15,14 +15,16 @@ jobs:
       - name: Build docker name
         run: docker build -t shivam6131/nodejs-app .
       - name: Publish image to dockerhub.
-        run: docker push shivam6131/nodejs-app:latest
+        run: | 
+          docker push shivam6131/nodejs-app:latest
+          docker push shivam6131/nodejs-app:${{ steps.vars.outputs.short_sha }}
 
   deploy:
     needs: build
     runs-on: [aws-ec2-new]
     steps:
       - name: Pull images from docker hub
-        run: docker pull shivam6131/nodejs-app:latest
+        run: docker pull shivam6131/nodejs-app:${{ steps.vars.outputs.short_sha }}
       - name: Delete old container
         run: docker rm -f nodejs-app-container
       # - name: run docker container
