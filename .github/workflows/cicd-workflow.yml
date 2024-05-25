@@ -40,5 +40,7 @@ jobs:
         run: docker pull shivam6131/nodejs-app:latest
       - name: Delete old container
         run: docker rm -f nodejs-app-container
+      - name: navigate to dockercompose directory.
+        run: cd ../
       - name: run docker container
         run: docker-compose up -d
