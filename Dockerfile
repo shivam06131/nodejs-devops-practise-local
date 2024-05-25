@@ -9,7 +9,7 @@ ARG NODE_ENV
 ARG APP_PORT\
 
 # Copy package.json and package-lock.json files
-COPY package*.json ./
+COPY package*.json .
 
 # Install dependencies
 RUN npm install
