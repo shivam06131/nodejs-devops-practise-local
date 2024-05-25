@@ -39,6 +39,7 @@ jobs:
           services:
             web:
               image: shivam6131/nodejs-app:latest
+              container_name: nodejs-app-container
               ports:
                 - "${{ secrets.PORT }}:${{ secrets.PORT }}"
               environment:
