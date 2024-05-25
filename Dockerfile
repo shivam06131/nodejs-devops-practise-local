@@ -7,8 +7,8 @@ WORKDIR /usr/src/app
 # Define build arguments
 ARG PORT
 ARG TESTENV
-echo PORT
-echo TESTENV
+echo "PORT: $PORT"
+echo "TESTENV: $TESTENV"
 
 # Copy package.json and package-lock.json files
 COPY package.json /usr/src/app/package.json
