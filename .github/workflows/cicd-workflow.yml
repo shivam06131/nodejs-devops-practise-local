@@ -43,5 +43,6 @@ jobs:
       - name: Current Directory
         run: |
           echo $GITHUB_WORKSPACE
+          ls -l
       - name: run docker container
         run: docker-compose up -d
