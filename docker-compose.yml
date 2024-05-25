@@ -1,0 +1,16 @@
+version: "3"
+services:
+  web:
+    build:
+      context: .
+      # Will be used while building the image (In Dockerfile)
+      args:
+        NODE_ENV: development
+        APP_PORT: 4000
+    ports:
+      - "4000:4000"
+    # Will be used inside the node application (using process.env)
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app

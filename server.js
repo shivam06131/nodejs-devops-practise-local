@@ -12,11 +12,10 @@ app.get('/env', (req, res) => {
   let resData = {
     port: PORT,
     testENV: process.env.TESTENV,
-    message : "THIS IS THE UPDATED REPSOSNE..."
+    message : "THIS IS THE UPDATED REPSOSNE !!!"
   }
 
   console.log("resData => ", resData);
-
   res.send(resData)
 });
 

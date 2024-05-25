@@ -16,5 +16,8 @@ COPY . .
 # EXPOSE ${APP_PORT}
 EXPOSE 4000
 
+# Install nodemon globally
+RUN npm install -g nodemon
+
 # Define the command to run the application
-CMD ["node", "server.js"]
+CMD ["npm", "run" , "start:dev"]
