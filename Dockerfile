@@ -5,14 +5,12 @@ FROM node:18
 WORKDIR /usr/src/app
 
 # Define build arguments
-ARG NODE_ENV
-ARG APP_PORT\
+ARG APP_PORT
 
 # Copy package.json and package-lock.json files
-COPY package*.json .
-
-# Install dependencies
-RUN npm install
+COPY package.json /usr/src/app/package.json
+COPY package-lock.json /usr/src/app/package-lock.json
+RUN npm ci
 
 # Copy the rest of the application code
 COPY . .
