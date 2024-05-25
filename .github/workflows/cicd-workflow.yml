@@ -45,6 +45,8 @@ jobs:
           echo "Current Directory: $GITHUB_WORKSPACE"
       - name: List all files (including hidden ones)
         run: ls -a
+      - name: show env
+        run: cat .env
       - name: List files in the current directory
         run: ls -l
       - name: echo file
