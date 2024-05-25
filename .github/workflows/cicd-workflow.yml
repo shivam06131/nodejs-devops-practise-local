@@ -6,41 +6,53 @@ on:
 
 jobs:
   build:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-      - name: Login to docker hub
+
+      - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build docker name
-        run: docker build -t shivam6131/nodejs-app .
-      - name: Publish image to dockerhub.
-        run: | 
+
+      - name: Build and tag Docker image
+        run: |
+          docker build -t shivam6131/nodejs-app:latest -t shivam6131/nodejs-app:${{ github.sha }} .
+
+      - name: Push Docker images
+        run: |
           docker push shivam6131/nodejs-app:latest
           docker push shivam6131/nodejs-app:${{ github.sha }}
 
   deploy:
     needs: build
-    runs-on: [aws-ec2-new]
+    runs-on: aws-ec2-new
     steps:
-      - name: Pull images from docker hub
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Pull images from Docker Hub
         run: docker pull shivam6131/nodejs-app:${{ github.sha }}
+
       - name: Delete old container
-        run: docker rm -f nodejs-app-container
-      # - name: run docker container
-      #   run: docker run -d -p 4000:4000 --name nodejs-app-container shivam6131/nodejs-app
+        run: docker rm -f nodejs-app-container || true
+
+      # - name: Run new container
+      #   run: docker run -d -p 4000:4000 --name nodejs-app-container shivam6131/nodejs-app:${{ github.sha }}
 
   run:
     needs: deploy
-    runs-on: [aws-ec2-new]
+    runs-on: aws-ec2-new
     steps:
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Create Docker Compose file
         run: |
           cat <<EOF > docker-compose.yml
           version: '3'
           services:
             web:
-              image: shivam6131/nodejs-app:latest
+              image: shivam6131/nodejs-app:${{ github.sha }}
               container_name: nodejs-app-container
               ports:
                 - "${{ secrets.PORT }}:${{ secrets.PORT }}"
@@ -49,6 +61,6 @@ jobs:
                 - PORT=${{ secrets.PORT }}
                 - TESTENV=${{ secrets.TESTENV }}
           EOF
+
       - name: Run Docker Compose
         run: docker-compose up -d
-        working-directory: ${{ github.workspace }}
