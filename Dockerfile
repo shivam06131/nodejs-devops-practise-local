@@ -8,8 +8,13 @@ WORKDIR /usr/src/app
 ARG PORT
 ARG TESTENV
 
-RUN echo ${APP_PORT}
-RUN echo ${APP_PORT}
+# Set environment variables based on the arguments
+ENV PORT=${PORT}
+ENV TESTENV=${TESTENV}
+
+# Print the values of the environment variables
+RUN echo "PORT: $PORT" && \
+    echo "TESTENV: $TESTENV"
 
 # Copy package.json and package-lock.json files
 COPY package.json /usr/src/app/package.json
