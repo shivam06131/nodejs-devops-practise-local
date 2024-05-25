@@ -40,6 +40,8 @@ jobs:
         run: docker pull shivam6131/nodejs-app:latest
       - name: Delete old container
         run: docker rm -f nodejs-app-container
+      - name: Current Directory
+        run: ls
       - name: Navigate to root directory
         run: cd $GITHUB_WORKSPACE
       - name: run docker container
