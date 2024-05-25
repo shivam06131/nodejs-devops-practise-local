@@ -28,28 +28,28 @@ jobs:
   #     - name: run docker container
   #       run: docker run -d -p 4000:4000 --name nodejs-app-container shivam6131/nodejs-app
 
-deploy:
-  needs: build
-  runs-on: [aws-ec2-new]
-  steps:
-    - name: Set up environment variables
-      run: |
-        echo "TESTENV=${{ secrets.TESTENV }}" >> .env
-        echo "PORT=${{ secrets.PORT }}" >> .env
-    - name: Pull images from Docker Hub
-      run: docker pull shivam6131/nodejs-app:latest
-    - name: Delete old container
-      run: docker rm -f nodejs-app-container
-    - name: Print current directory
-      run: |
-        echo "Current Directory: $GITHUB_WORKSPACE"
-    - name: List all files (including hidden ones)
-      run: ls -a
-    - name: List files in the current directory
-      run: ls -l
-    - name: Change directory to where docker-compose.yml is located
-      run: cd $GITHUB_WORKSPACE
-    - name: List files in the directory
-      run: ls -l
-    - name: Run docker-compose up
-      run: docker-compose up -d
+  deploy:
+    needs: build
+    runs-on: [aws-ec2-new]
+    steps:
+      - name: Set up environment variables
+        run: |
+          echo "TESTENV=${{ secrets.TESTENV }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+      - name: Pull images from Docker Hub
+        run: docker pull shivam6131/nodejs-app:latest
+      - name: Delete old container
+        run: docker rm -f nodejs-app-container
+      - name: Print current directory
+        run: |
+          echo "Current Directory: $GITHUB_WORKSPACE"
+      - name: List all files (including hidden ones)
+        run: ls -a
+      - name: List files in the current directory
+        run: ls -l
+      - name: Change directory to where docker-compose.yml is located
+        run: cd $GITHUB_WORKSPACE
+      - name: List files in the directory
+        run: ls -l
+      - name: Run docker-compose up
+        run: docker-compose up -d
