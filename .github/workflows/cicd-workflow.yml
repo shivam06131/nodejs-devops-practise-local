@@ -49,7 +49,10 @@ jobs:
           target: "~/dockerComposeFiles/"
 
       - name: List files for debugging
-        run: ls -al
+        run: |
+          ls -la
+          cd ..
+          ls -la
 
       - name: Copy docker-compose-uat.yml to server
         uses: appleboy/scp-action@master
