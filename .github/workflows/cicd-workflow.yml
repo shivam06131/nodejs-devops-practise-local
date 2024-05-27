@@ -26,9 +26,9 @@ jobs:
       # Create the environment file with secrets
       - name: Create environment file
         run: |
-          echo "NODE_ENV=development" > env-file
-          echo "PORT=${{ secrets.PORT }}" >> env-file
-          echo "TESTENV=${{ secrets.TESTENV }}" >> env-file
+          echo "NODE_ENV=development" > .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "TESTENV=${{ secrets.TESTENV }}" >> .env
 
       # Copy the environment file to the server
       - name: Copy environment file to server
@@ -37,7 +37,7 @@ jobs:
           host: ${{ secrets.SSH_HOST_DNS }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "env-file"
+          source: ".env"
           target: "~/dockerComposeFiles/"
 
       - name: Copy docker-compose-uat.yml to EC2
@@ -62,5 +62,6 @@ jobs:
             docker rm -f nodejs-app-container || true
             ls -la
             cd ~/dockerComposeFiles
-            source ./env-file
+            set -a
+            source ./.env
             docker-compose -f docker-compose-uat.yml up -d
