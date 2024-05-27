@@ -24,17 +24,15 @@ jobs:
           docker push shivam6131/nodejs-app:${{ github.sha }}
 
       - name: Copy docker-compose-uat.yml to EC2
-        uses: appleboy/scp-action@v0.1.3
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST_DNS }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            echo "${{ secrets.EC2_SSH_KEY }}" > private_key
-            chmod 600 private_key
-            scp -o StrictHostKeyChecking=no -i private_key docker-compose-uat.yml ${{ secrets.USERNAME }}@${{ secrets.SSH_HOST_DNS }}:~/docker-compose-uat.yml
-            rm private_key
-      
+          source: "./docker-compose-uat.yml"
+          target: "~/dockerComposeFiles/"
+          recursive: false  # Ensure this is false to prevent directory copy
+
       - name: Execute remote ssh commands (login dockerhub , pull images, run container).
         uses: appleboy/ssh-action@master
         with:
