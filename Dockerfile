@@ -1,15 +1,35 @@
-# Build Stage (Install dependencies)
-FROM node:18 AS builder
+# First stage: Build the application
+FROM node:18-slim AS builder
+
+# Set the working directory inside the container
 WORKDIR /usr/src/app
-COPY package*.json ./
+
+# Copy package.json and package-lock.json files and install dependencies
+COPY package.json package-lock.json ./
 RUN npm ci
 
-# Runner Stage (Final image)
-FROM node:18-alpine
-WORKDIR /usr/src/app
-COPY --from=builder /usr/src/app/node_modules ./node_modules
+# Copy the rest of the application code and build the app
 COPY . .
+RUN npm run build
 
-# Expose port and start command (rest remains the same)
+# Second stage: Create the final image
+FROM node:18-slim
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy only the build output and package.json files from the builder stage
+COPY --from=builder /usr/src/app/build ./build
+COPY package.json package-lock.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Install nodemon globally
+RUN npm install -g nodemon && npm cache clean --force
+
+# Expose the port the app runs on
 EXPOSE 4000
-CMD ["npm", "run" , "start:dev"]
+
+# Define the command to run the application
+CMD ["npm", "run", "start:dev"]
