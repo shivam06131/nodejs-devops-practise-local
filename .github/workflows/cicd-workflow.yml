@@ -56,7 +56,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "./docker-compose-uat.yml"
           target: "~/dockerComposeFiles/"
-          recursive: false  # Ensure this is false to prevent directory copy
 
   deploy:
     runs-on: ubuntu-latest
