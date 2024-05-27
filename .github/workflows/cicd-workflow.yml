@@ -23,44 +23,14 @@ jobs:
           docker push shivam6131/nodejs-app:latest
           docker push shivam6131/nodejs-app:${{ github.sha }}
 
-  deploy:
-    needs: build
-    runs-on: aws-ec2-new
-    steps:
-      - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Pull images from Docker Hub
-        run: docker pull shivam6131/nodejs-app:${{ github.sha }}
-
-      - name: Delete old container
-        run: docker rm -f nodejs-app-container || true
-
-      # - name: Run new container
-      #   run: docker run -d -p 4000:4000 --name nodejs-app-container shivam6131/nodejs-app:${{ github.sha }}
-
-  run:
-    needs: deploy
-    runs-on: aws-ec2-new
-    steps:
-      - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Create Docker Compose file
-        run: |
-          cat <<EOF > docker-compose-uat.yml
-          version: '3'
-          services:
-            web:
-              image: shivam6131/nodejs-app:${{ github.sha }}
-              container_name: nodejs-app-container
-              ports:
-                - "${{ secrets.PORT }}:${{ secrets.PORT }}"
-              environment:
-                - NODE_ENV=development
-                - PORT=${{ secrets.PORT }}
-                - TESTENV=${{ secrets.TESTENV }}
-          EOF
-
-      - name: Run Docker Compose
-        run: docker-compose -f docker-compose-uat.yml up -d
+      - name: Execute remote ssh commands (login dockerhub , pull images, run container).
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker pull shivam6131/nodejs-app:${{ github.sha }}
+            docker rm -f nodejs-app-container || true
+            docker-compose -f docker-compose-uat.yml up -d
