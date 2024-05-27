@@ -23,6 +23,23 @@ jobs:
           docker push shivam6131/nodejs-app:latest
           docker push shivam6131/nodejs-app:${{ github.sha }}
 
+      # Create the environment file with secrets
+      - name: Create environment file
+        run: |
+          echo "NODE_ENV=development" > env-file
+          echo "PORT=${{ secrets.PORT }}" >> env-file
+          echo "TESTENV=${{ secrets.TESTENV }}" >> env-file
+
+      # Copy the environment file to the server
+      - name: Copy environment file to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "env-file"
+          target: "~/dockerComposeFiles/env-file"
+
       - name: Copy docker-compose-uat.yml to EC2
         uses: appleboy/scp-action@master
         with:
@@ -33,10 +50,6 @@ jobs:
           target: "~/dockerComposeFiles/"
           recursive: false  # Ensure this is false to prevent directory copy
 
-      # - name: Substitute environment variables in docker-compose file
-      #   run: |
-      #     ssh ${{ secrets.USERNAME }}@${{ secrets.SSH_HOST_DNS }} "export PORT=${{ secrets.PORT }} TESTENV=${{ secrets.TESTENV }} && envsubst < ~/dockerComposeFiles/docker-compose-uat.yml > ~/dockerComposeFiles/docker-compose-uat-final.yml"
-
       - name: Execute remote ssh commands (login dockerhub , pull images, run container).
         uses: appleboy/ssh-action@master
         with:
@@ -44,9 +57,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            ssh ${{ secrets.USERNAME }}@${{ secrets.SSH_HOST_DNS }} "export PORT=${{ secrets.PORT }} TESTENV=${{ secrets.TESTENV }} && envsubst < ~/dockerComposeFiles/docker-compose-uat.yml > ~/dockerComposeFiles/docker-compose-uat-final.yml"
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull shivam6131/nodejs-app:${{ github.sha }}
             docker rm -f nodejs-app-container || true
             ls -la
-            docker-compose -f ~/dockerComposeFiles/docker-compose-uat.yml up -d
+            cd ~/dockerComposeFiles
+            source ./env-file
+            docker-compose up -d
