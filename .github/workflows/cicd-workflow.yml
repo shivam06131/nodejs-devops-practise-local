@@ -31,6 +31,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "docker-compose-uat.yml"
           target: "~/docker-compose-uat.yml"
+          recursive: false  # Ensure this is false to prevent directory copy
 
       - name: Execute remote ssh commands (login dockerhub , pull images, run container).
         uses: appleboy/ssh-action@master
