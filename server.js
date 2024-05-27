@@ -19,14 +19,7 @@ app.get('/env', (req, res) => {
   res.send(resData)
 });
 
-console.log("PORT", PORT);
-console.log("PORT TYPE ", typeof PORT);
-console.log("PORT TYPE CONVERTED", typeof Number(PORT));
-
-console.log("TESTENV  ", process.env.TESTENV);
-
-let portNumber = Number(PORT);
 // Start the server
-app.listen(portNumber, () => {
-  console.log(`Server is running on http://localhost:${portNumber}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
