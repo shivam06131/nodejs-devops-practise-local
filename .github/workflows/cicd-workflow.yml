@@ -63,4 +63,4 @@ jobs:
             ls -la
             cd ~/dockerComposeFiles
             source ./env-file
-            docker-compose up -d
+            docker-compose -f docker-compose-uat.yml up -d
