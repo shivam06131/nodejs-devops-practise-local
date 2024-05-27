@@ -43,3 +43,4 @@ jobs:
             docker pull shivam6131/nodejs-app:${{ github.sha }}
             docker rm -f nodejs-app-container || true
             docker-compose -f ~/docker-compose-uat.yml up -d
+          port: 22
