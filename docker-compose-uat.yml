@@ -2,7 +2,7 @@ version: '3.8'  # Update the version to the latest supported format
 
 services:
   web:
-    image: "${PORT}/nodejs-app:latest"
+    image: "${DOCKER_USERNAME}/nodejs-app:latest"
     container_name: nodejs-app-container
     environment:
       - NODE_ENV=development
