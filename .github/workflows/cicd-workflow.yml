@@ -35,7 +35,7 @@ jobs:
             scp -o StrictHostKeyChecking=no -i private_key docker-compose-uat.yml ${{ secrets.USERNAME }}@${{ secrets.SSH_HOST_DNS }}:~/docker-compose-uat.yml
             rm private_key
       
-            - name: Execute remote ssh commands (login dockerhub , pull images, run container).
+      - name: Execute remote ssh commands (login dockerhub , pull images, run container).
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST_DNS }}
