@@ -20,7 +20,7 @@ app.get('/env', (req, res) => {
   res.send(resData)
 });
 
-
+console.log("PORT TYPE ", typeof PORT);
 
 // Start the server
 app.listen(PORT, () => {
