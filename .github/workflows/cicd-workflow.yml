@@ -33,9 +33,9 @@ jobs:
           target: "~/dockerComposeFiles/"
           recursive: false  # Ensure this is false to prevent directory copy
 
-      - name: Substitute environment variables in docker-compose file
-        run: |
-          ssh ${{ secrets.USERNAME }}@${{ secrets.SSH_HOST_DNS }} "export PORT=${{ secrets.PORT }} TESTENV=${{ secrets.TESTENV }} && envsubst < ~/dockerComposeFiles/docker-compose-uat.yml > ~/dockerComposeFiles/docker-compose-uat-final.yml"
+      # - name: Substitute environment variables in docker-compose file
+      #   run: |
+      #     ssh ${{ secrets.USERNAME }}@${{ secrets.SSH_HOST_DNS }} "export PORT=${{ secrets.PORT }} TESTENV=${{ secrets.TESTENV }} && envsubst < ~/dockerComposeFiles/docker-compose-uat.yml > ~/dockerComposeFiles/docker-compose-uat-final.yml"
 
       - name: Execute remote ssh commands (login dockerhub , pull images, run container).
         uses: appleboy/ssh-action@master
@@ -44,6 +44,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            ssh ${{ secrets.USERNAME }}@${{ secrets.SSH_HOST_DNS }} "export PORT=${{ secrets.PORT }} TESTENV=${{ secrets.TESTENV }} && envsubst < ~/dockerComposeFiles/docker-compose-uat.yml > ~/dockerComposeFiles/docker-compose-uat-final.yml"
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull shivam6131/nodejs-app:${{ github.sha }}
             docker rm -f nodejs-app-container || true
