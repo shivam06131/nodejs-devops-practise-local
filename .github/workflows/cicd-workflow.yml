@@ -23,8 +23,17 @@ jobs:
           docker push shivam6131/nodejs-app:latest
           docker push shivam6131/nodejs-app:${{ github.sha }}
 
+      - name: Copy docker-compose-uat.yml to EC2
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.SSH_HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose-uat.yml"
+          target: "~/docker-compose-uat.yml"
+
       - name: Execute remote ssh commands (login dockerhub , pull images, run container).
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST_DNS }}
           username: ${{ secrets.USERNAME }}
@@ -33,4 +42,4 @@ jobs:
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull shivam6131/nodejs-app:${{ github.sha }}
             docker rm -f nodejs-app-container || true
-            docker-compose -f docker-compose-uat.yml up -d
+            docker-compose -f ~/docker-compose-uat.yml up -d
