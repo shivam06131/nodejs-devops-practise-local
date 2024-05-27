@@ -19,6 +19,10 @@ app.get('/env', (req, res) => {
   res.send(resData)
 });
 
+app.get('/' , (req ,res) => {
+  res.send(`Listning on port ${PORT}`)
+})
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
