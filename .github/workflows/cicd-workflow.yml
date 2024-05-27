@@ -29,6 +29,7 @@ jobs:
           echo "NODE_ENV=development" > .env
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "TESTENV=${{ secrets.TESTENV }}" >> .env
+          echo "IMAGE_TAG=${{ github.sha }}" >> .env
 
       # Copy the environment file to the server
       - name: Copy environment file to server
