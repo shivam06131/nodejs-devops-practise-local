@@ -29,11 +29,13 @@ jobs:
           host: ${{ secrets.SSH_HOST_DNS }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "./docker-compose-uat.yml"
-          target: "~/docker-compose-uat.yml"
-          recursive: false  # Ensure this is false to prevent directory copy
-
-      - name: Execute remote ssh commands (login dockerhub , pull images, run container).
+          script: |
+            echo "${{ secrets.EC2_SSH_KEY }}" > private_key
+            chmod 600 private_key
+            scp -o StrictHostKeyChecking=no -i private_key docker-compose-uat.yml ${{ secrets.USERNAME }}@${{ secrets.SSH_HOST_DNS }}:~/docker-compose-uat.yml
+            rm private_key
+      
+            - name: Execute remote ssh commands (login dockerhub , pull images, run container).
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST_DNS }}
