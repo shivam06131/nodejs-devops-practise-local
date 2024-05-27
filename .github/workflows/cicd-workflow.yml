@@ -44,4 +44,4 @@ jobs:
             docker pull shivam6131/nodejs-app:${{ github.sha }}
             docker rm -f nodejs-app-container || true
             ls -la
-            docker-compose -f ~/docker-compose-uat.yml up -d
+            docker-compose -f ~/dockerComposeFiles/docker-compose-uat.yml up -d
