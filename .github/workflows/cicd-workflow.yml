@@ -33,7 +33,7 @@ jobs:
           target: "~/docker-compose-uat.yml"
 
       - name: Execute remote ssh commands (login dockerhub , pull images, run container).
-        uses: appleboy/ssh-action@v0.1.7
+        uses: appleboy/ssh-action
         with:
           host: ${{ secrets.SSH_HOST_DNS }}
           username: ${{ secrets.USERNAME }}
@@ -43,4 +43,3 @@ jobs:
             docker pull shivam6131/nodejs-app:${{ github.sha }}
             docker rm -f nodejs-app-container || true
             docker-compose -f ~/docker-compose-uat.yml up -d
-          port: 22
