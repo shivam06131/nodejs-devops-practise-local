@@ -1,11 +1,12 @@
-version: "3"
+version: '3.8'  # Update the version to the latest supported format
+
 services:
   web:
     image: shivam6131/nodejs-app:latest
     container_name: nodejs-app-container
     environment:
       - NODE_ENV=development
-      - PORT
-      - TESTENV
+      - PORT=${PORT}
+      - TESTENV=${TESTENV}
     ports:
       - "${PORT}:${PORT}"
