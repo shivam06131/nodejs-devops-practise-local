@@ -4,11 +4,11 @@ services:
     image: shivam6131/nodejs-app:latest
     container_name: nodejs-app-container
     args:
-      PORT: ${{ secrets.PORT }}
-      TESTENV: ${{ secrets.TESTENV }}
+      PORT: $$${{ secrets.PORT }}
+      TESTENV: $$${{ secrets.TESTENV }}
     ports:
-      - "${{ secrets.PORT }}:${{ secrets.PORT }}"
+      - "$${{ secrets.PORT }}:$${{ secrets.PORT }}"
     environment:
       - NODE_ENV=development
-      - PORT=${{ secrets.PORT }}
-      - TESTENV=${{ secrets.TESTENV }}
+      - PORT=$${{ secrets.PORT }}
+      - TESTENV=$${{ secrets.TESTENV }}
