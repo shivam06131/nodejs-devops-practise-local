@@ -21,3 +21,6 @@ docker-compose -f docker-compose.yml up --build
 
 ## TO RUN ON SERVER
 docker-compose -f docker-compose.yml up --build
+
+
+test
