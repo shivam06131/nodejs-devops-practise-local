@@ -16,15 +16,15 @@ jobs:
 
       - name: Verify Docker login
         run: docker info | grep Username
-        
+
       - name: Build and tag Docker image
         run: |
-          docker build -t shivam6131/nodejs-app:latest -t shivam6131/nodejs-app:${{ github.sha }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/nodejs-app:latest -t ${{ secrets.DOCKER_USERNAME }}/nodejs-app:${{ github.sha }} .
 
       - name: Push Docker images
         run: |
-          docker push shivam6131/nodejs-app:latest
-          docker push shivam6131/nodejs-app:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/nodejs-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/nodejs-app:${{ github.sha }}
 
   file_transfer:
     runs-on: ubuntu-latest
@@ -36,6 +36,7 @@ jobs:
           echo "NODE_ENV=development" > .env
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "TESTENV=${{ secrets.TESTENV }}" >> .env
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
 
       # Copy the environment file to the server
       - name: Copy environment file to server
@@ -69,7 +70,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull shivam6131/nodejs-app:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/nodejs-app:latest
             docker rm -f nodejs-app-container || true
             cd ~/dockerComposeFiles
             set -a
