@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Checkout source') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-repo/your-project.git'
+                git branch: 'main', url: 'https://github.com/shivam06131/nodejs-devops-practise-local.git'
             }
         }
 
