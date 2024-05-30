@@ -12,6 +12,20 @@ pipeline {
     }
 
     stages {
+        stage('Echo Credentials') {
+            steps {
+                script {
+                    echo "DOCKER_USERNAME: ${DOCKER_USERNAME}"
+                    echo "DOCKER_PASSWORD: ${DOCKER_PASSWORD}"
+                    echo "PORT: ${PORT}"
+                    echo "TESTENV: ${TESTENV}"
+                    echo "SSH_HOST_DNS: ${SSH_HOST_DNS}"
+                    echo "USERNAME: ${USERNAME}"
+                    echo "EC2_SSH_KEY: ${EC2_SSH_KEY}"
+                }
+            }
+        }
+
         stage('Checkout source') {
             steps {
                 git branch: 'main', url: 'https://github.com/shivam06131/nodejs-devops-practise-local.git'
@@ -20,10 +34,8 @@ pipeline {
 
         stage('Login to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDENTIALS', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh """
-                        echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin
-                    """
+                script {
+                    sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
                 }
             }
         }
@@ -87,7 +99,7 @@ pipeline {
                 sshagent(['EC2_SSH_KEY']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${USERNAME}@${SSH_HOST_DNS} << EOF
-                            docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
+                            echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin
                             docker pull ${DOCKER_USERNAME}/nodejs-app:latest
                             docker rm -f nodejs-app-container || true
                             cd ~/dockerComposeFiles
